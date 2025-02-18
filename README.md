@@ -32,8 +32,8 @@ npm install less less-loader --save-dev
 
 > [通用资源类型](https://www.webpackjs.com/guides/asset-modules/#general-asset-type)
 >
-> ```json
->module: {
+> ```
+> module: {
 >    rules: [
 >         {
 >            test: /\.(png|jpe?g|gif|webp|sbg)$/,
@@ -57,7 +57,7 @@ npm install less less-loader --save-dev
 
 `js`
 
-```json
+```
 // 输出
     output: {
         // 所有文件的输出路径
@@ -69,7 +69,7 @@ npm install less less-loader --save-dev
 
 图片
 
-```json
+```
 module: {
     rules: [
       {
@@ -93,7 +93,7 @@ module: {
 
 ## 打包前清空打包目录
 
-```json
+```
 output:{
     path: xxx,
     clean: true, // 在打包前将path的路径全部清空
@@ -111,4 +111,3 @@ npm i eslint-webpack-plugin eslint -D
 定义配置文件
 
 `.eslintrc.js`或者其他后缀格式的
-
