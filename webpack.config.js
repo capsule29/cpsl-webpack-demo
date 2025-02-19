@@ -1,6 +1,7 @@
 // node.js环境
 const path = require("path");
 const ESLintPlugin = require("eslint-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     // 入口
@@ -40,9 +41,20 @@ module.exports = {
     // 插件
     plugins: [
         new ESLintPlugin({
-            context: path.resolve(__dirname, "src"),
+            context: path.resolve(__dirname, "src"), // 要检查格式的文件夹
         }),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "public/index.html"),
+            // 依照public下的index.html添加DOM模板，没有这个就是空
+            // 新生成的html结构和原来的一致，但是会引入打包输出的资源
+        }), // html自动导入插件    ./dist/index.html
     ],
+    // 开发服务器 webpack-dev-server 在内存编译，不进行打包输出
+    devServer: {
+        host: "localhost", // 启动服务器域名
+        port: "3000", // 启动服务器端口号
+        open: true, // 是否自动打开浏览器
+    },
     // 环境
     mode: "development",
 };

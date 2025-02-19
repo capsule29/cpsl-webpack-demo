@@ -11,6 +11,6 @@ module.exports = {
     },
     rules: {
         "no-var": "error", // 不能使用 var 定义变量
-        "no-unused-vars": 1,
+        "no-unused-vars": "off",
     },
 };
