@@ -44,7 +44,39 @@ ES6+ 编译成向下兼容的`js`
 
 ## CSS兼容性问题
 
+[`postcss-loader`](https://www.webpackjs.com/loaders/postcss-loader/)
 
+
+
+在`package.json`中可以设置需要兼容的浏览器版本
+
+> ```json
+> {
+> 	"browserslist": [
+>         "last 2 version",
+>         "> 1%",
+>         "not dead"
+>     ]
+> }
+> ```
+
+
+
+## 可以定义函数返回配置，以实现代码的复用
+
+```js
+function getCSSLoader(otherLoader){
+    return [
+        // 配置
+    ,otherLoader].filter(Boolean)
+}
+```
+
+
+
+## CSS压缩
+
+[`css-minimizer-webpack-plugin`](https://www.webpackjs.com/plugins/css-minimizer-webpack-plugin/)
 
 
 

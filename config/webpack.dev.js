@@ -3,6 +3,23 @@ const path = require("path");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
+function getStyleLoader(otherLoader) {
+    return [
+        MiniCssExtractPlugin.loader,
+        "css-loader",
+        {
+            loader: "postcss-loader",
+            options: {
+                postcssOptions: {
+                    plugins: [["postcss-preset-env"]],
+                },
+            },
+        },
+        otherLoader,
+    ].filter(Boolean);
+}
 
 module.exports = {
     // 入口
@@ -43,9 +60,17 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
+                use: getStyleLoader(), // 代码复用
             },
         ],
+    },
+    optimization: {
+        minimizer: [
+            // 在 webpack@5 中，你可以使用 `...` 语法来扩展现有的 minimizer（即 `terser-webpack-plugin`），将下一行取消注释
+            // `...`,
+            new CssMinimizerPlugin(), // CSS压缩
+        ],
+        minimize: true, // 生产环境下也压缩CSS
     },
     // 插件
     plugins: [
