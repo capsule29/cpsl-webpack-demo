@@ -2,14 +2,17 @@
 const path = require("path");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     // 入口
     entry: "./src/main.js", // 相对路径
+    // 相对于指令运行时的路径，因此不需要更改路径
     // 输出
     output: {
         // 所有文件的输出路径
-        path: path.resolve(__dirname, "dist"), // 绝对路径
+        // 因为__dirname是nodejs提供的本文件的所在路径，所以需要更改路径
+        path: path.resolve(__dirname, "../dist"), // 绝对路径
         // 入口文件的输出名
         filename: "static/js/main.js", // 入口文件输出到static/js目录下的main.js文件中
     },
@@ -17,13 +20,14 @@ module.exports = {
     module: {
         rules: [
             // loader配置
-            {
-                test: /\.css$/i,
-                use: [
-                    "style-loader", //将js中的css，通过创建style标签添加到html中
-                    "css-loader" /*将css资源打包成CommonJS模块到js文件中 */,
-                ], // 执行顺序从右向左（下到上）
-            },
+            // // 因为有了MiniCssExtractPlugin插件
+            // {
+            //     test: /\.css$/i,
+            //     use: [
+            //         "style-loader", //将js中的css，通过创建style标签添加到html中
+            //         "css-loader" /*将css资源打包成CommonJS模块到js文件中 */,
+            //     ], // 执行顺序从右向左（下到上）
+            // },
             {
                 test: /\.(png|jpe?g|gif|webp|svg)$/,
                 type: "asset",
@@ -36,25 +40,27 @@ module.exports = {
                 },
                 generator: {},
             },
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, "css-loader"],
+            },
         ],
     },
     // 插件
     plugins: [
         new ESLintPlugin({
-            context: path.resolve(__dirname, "src"), // 要检查格式的文件夹
+            context: path.resolve(__dirname, "../src"), // 要检查格式的文件夹
         }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "public/index.html"),
+            template: path.resolve(__dirname, "../public/index.html"),
             // 依照public下的index.html添加DOM模板，没有这个就是空
             // 新生成的html结构和原来的一致，但是会引入打包输出的资源
         }), // html自动导入插件    ./dist/index.html
+        new MiniCssExtractPlugin({
+            filename: "./static/css/main.css",
+        }), // 将css从js中剥离，优化闪屏现象
     ],
-    // 开发服务器 webpack-dev-server 在内存编译，不进行打包输出
-    devServer: {
-        host: "localhost", // 启动服务器域名
-        port: "3000", // 启动服务器端口号
-        open: true, // 是否自动打开浏览器
-    },
+
     // 环境
-    mode: "development",
+    mode: "production",
 };
