@@ -35,31 +35,36 @@ module.exports = {
     },
     // 加载器
     module: {
+        // loader配置
         rules: [
-            // loader配置
-            // // 因为有了MiniCssExtractPlugin插件
-            // {
-            //     test: /\.css$/i,
-            //     use: [
-            //         "style-loader", //将js中的css，通过创建style标签添加到html中
-            //         "css-loader" /*将css资源打包成CommonJS模块到js文件中 */,
-            //     ], // 执行顺序从右向左（下到上）
-            // },
             {
-                test: /\.(png|jpe?g|gif|webp|svg)$/,
-                type: "asset",
-                parser: {
-                    dataUrlCondition: {
-                        // 小于10kb的文件会被base64转换成字符串
-                        // 优点：减少网页请求，缺点略微加大体积
-                        maxSize: 10 * 1024, // 10kb
+                // oneof配置
+                oneof: [
+                    // // 因为有了MiniCssExtractPlugin插件
+                    // {
+                    //     test: /\.css$/i,
+                    //     use: [
+                    //         "style-loader", //将js中的css，通过创建style标签添加到html中
+                    //         "css-loader" /*将css资源打包成CommonJS模块到js文件中 */,
+                    //     ], // 执行顺序从右向左（下到上）
+                    // },
+                    {
+                        test: /\.(png|jpe?g|gif|webp|svg)$/,
+                        type: "asset",
+                        parser: {
+                            dataUrlCondition: {
+                                // 小于10kb的文件会被base64转换成字符串
+                                // 优点：减少网页请求，缺点略微加大体积
+                                maxSize: 10 * 1024, // 10kb
+                            },
+                        },
+                        generator: {},
                     },
-                },
-                generator: {},
-            },
-            {
-                test: /\.css$/i,
-                use: getStyleLoader(),
+                    {
+                        test: /\.css$/i,
+                        use: getStyleLoader(),
+                    },
+                ],
             },
         ],
     },
@@ -87,4 +92,5 @@ module.exports = {
 
     // 环境
     mode: "production",
+    devtool: "source-map", // source-map
 };
